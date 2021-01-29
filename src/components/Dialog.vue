@@ -5,7 +5,7 @@
               {{title}}
             </v-card-title>
             <v-card-text id="dialog-content" tabindex="0" v-html="message" />
-            <v-card-actions>
+            <v-card-actions class="justify-end">
               <v-btn 
                 role="button"
                 v-for="(btn, index) in buttons" 

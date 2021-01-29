@@ -8,7 +8,7 @@
       <v-toolbar-title>{{ appTitle }} editor</v-toolbar-title>
 
       <template v-slot:extension>
-        <v-tabs grow v-model="tab">
+        <v-tabs grow v-model="selectedTab" @change="tabChange">
           <v-tab key="general">General</v-tab>
           <v-tab key="parents">Journey Categories</v-tab>
           <v-tab key="journeys">Journeys</v-tab>
@@ -17,7 +17,7 @@
       </template>
 
     </v-app-bar>
-    <v-tabs-items v-model="tab" class="fill-height">
+    <v-tabs-items v-model="activeTab" class="fill-height">
       <v-tab-item key="general">
         <General/>
       </v-tab-item>
@@ -45,6 +45,7 @@ import Items from './Items.vue';
 import General from './General.vue';
 import Resources from './Resources.vue';
 import {mapGetters} from 'vuex'
+import {abandonChanges} from '@/utils/ui.js'
 
 export default {
   name: 'App',
@@ -61,7 +62,8 @@ export default {
       'snackbarText',
       'snackbarColour',
       'snackbarTimeout',
-      'snackbarIcon'
+      'snackbarIcon',
+      'unsaved'
     ]),
     showSnackbar: {
       get: function() {return this.$store.getters.showSnackbar},
@@ -71,7 +73,17 @@ export default {
   },
 
   data: () => ({
-    tab: 'journeys',
-  })
+    selectedTab: 0,
+    activeTab: 0
+  }),
+
+  methods: {
+    tabChange: async function() {
+      if (!this.unsaved || await abandonChanges(this.$dialog))
+        this.activeTab = this.selectedTab
+      else
+        this.selectedTab = this.activeTab
+    }
+  }
 };
 </script>

@@ -16,10 +16,10 @@
             </v-list-item-icon>New Resource
           </v-list-item>
           <v-divider/>
-          <v-list-item-group v-if="resources.length" v-model="resourceIndex" color="primary">
+          <v-list-item-group v-if="resources.length" v-model="selectedIndex" color="primary">
             <v-list-item v-for="(resource, i) in filteredResourceList" :key="i">
               <v-list-item-content>
-                <v-list-item-title v-if="resource.doc" v-html="resource.doc.name">Hello</v-list-item-title>
+                <v-list-item-title v-if="resource.doc" v-html="resource.doc.name"/>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -28,7 +28,7 @@
     </v-navigation-drawer>
     <v-main style="padding-left:256px">
       <v-container fluid class="fill-height" v-if="currentResource">
-        <component ref="resourceComponent" :is="component" v-model="currentResource.doc"/>
+        <resource-editor @input="updateResourceInfo" :value="currentResource.doc"/>
         <v-container>
             <v-btn class="mr-5" :disabled="deleting" :loading="saving" @click="saveResource">Save</v-btn>
             <v-btn :disabled="saving" :loading="deleting" @click="confirmDelete">Delete resource</v-btn>
@@ -40,19 +40,20 @@
 
 
 <script>
+  import {mapGetters, mapMutations} from 'vuex'
   import ResourceEditor from './components/controls/ResourceEditor'
   import {editorEndpoint} from '@/utils/endpoints.js'
   import {v4 as uuidv4} from 'uuid'
-  import {savePopup} from '@/utils/ui'
+  import {savePopup, abandonChanges} from '@/utils/ui'
   
   export default {
     components :{
-      'resource-editor': ResourceEditor
+      ResourceEditor
     },
     data: () => ({
       resources: [],
       resourceIndex: -1,
-      component: "resource-editor",
+      selectedResource: null,
       endpoint: process.env.VUE_APP_API_ENDPOINT,
       searchText: "",
       saving: false,
@@ -66,6 +67,9 @@
       .finally(() => {this.loading = false})
     },
     computed: {
+      ...mapGetters([
+        'unsaved'
+      ]),
       currentResource() {
         return this.resources.length && this.resourceIndex > -1 ? this.resources[this.resourceIndex] : null
       },
@@ -75,9 +79,18 @@
           return this.resources.filter((r) =>
             r.doc.name.toLowerCase().includes(this.searchText.toLowerCase())
           );
+      },
+      selectedIndex: {
+        get: function() {return this.resourceIndex},
+        set: async function(value) {
+          if (await abandonChanges(this.$dialog)) {
+            this.resourceIndex = value
+          } 
+        }
       }
     },
     methods: {
+      ...mapMutations(['setUnsaved']),
       saveResource() {
         this.saving = true;
         this.$set(this.currentResource, "id", this.currentResource.id || uuidv4())
@@ -96,6 +109,11 @@
           .finally(() => {
             this.saving = false;
           })
+      },
+      updateResourceInfo(value) {
+        const changed = JSON.stringify(this.selectedResource) !== JSON.stringify(this.filteredResourceList[this.resourceIndex].doc)
+        this.setUnsaved(changed)
+        this.selectedResource = value
       },
       confirmDelete() {
         this.$dialog
@@ -127,7 +145,8 @@
       },
       removeResUi() {
           this.resources.splice(this.resourceIndex,1);
-          this.resourceIndex = null;
+          this.resourceIndex = -1;
+          this.selectedIndex = -1
           this.deleteConfirmation = false
       },
       newResource() {
@@ -142,7 +161,7 @@
           }
         }
         this.resources.push(item);
-        this.resourceIndex = this.resources.length - 1
+        this.selectedIndex = this.resources.length - 1
       }
     }
   }

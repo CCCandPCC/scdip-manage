@@ -52,20 +52,12 @@
                 </v-col>
             </v-row>
             <v-row>
-                <v-col>
-                    Include tags
-                </v-col>
-                <v-col>
-                    Exclude tags
-                </v-col>
-                </v-row>
-            <v-row>
                 <info>Tags are how we link an answer to a resource. Include tags when matched with tags 
                     in questions will make the resource appear. Exclude tags will do the opposite</info>
             </v-row>
             <v-row>
                 <v-col>
-                    
+                    Include tags                 
                     <v-combobox
                         label=""
                         v-model="value.includeTags"
@@ -78,6 +70,7 @@
                     />
                 </v-col>
                 <v-col>
+                    Exclude tags
                     <v-combobox
                         label=""
                         v-model="value.excludeTags"
@@ -97,6 +90,7 @@
 <script>
 import HTMLEditor from "./HTMLEditor";
 import FileUpload from "./FileUpload";
+import Vue from 'vue';
 import Info from '@/components/controls/Info'
 
 export default {
@@ -125,9 +119,14 @@ export default {
     }),
     props: ["value"],
     watch: {
-        value: function() {
-            if (!this.value.img)
-                this.value.img = {}
+        value: {
+            deep: true,
+            handler: function() {
+                if (!this.value.img)
+                    Vue.set(this.value, 'img', {})
+
+                this.$emit('input', this.value)
+            }
         }
     },
     methods: {

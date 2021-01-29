@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     journey: null,
+    _unsaved: null,
     _showSnackbar: false,
     _snackbarColour: null,
     _snackbarText: "",
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     snackbarText: state => state._snackbarText,
     snackbarColour: state => state._snackbarColour,
     snackbarTimeout: state => state._snackbarTimeout,
-    snackbarIcon: state => state._snackbarIcon
+    snackbarIcon: state => state._snackbarIcon,
+    unsaved: state => state._unsaved
   },
 
   mutations: {
@@ -32,6 +34,12 @@ export default new Vuex.Store({
     },
     setSnackbarVisible(state, visible) {
       state._showSnackbar = visible
+    },
+    setUnsaved(state, value) {
+      state._unsaved = value
+    },
+    clearUnsaved(state) {
+      state._unsaved = null
     }
   },
 
