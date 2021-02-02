@@ -21,6 +21,8 @@
               <v-list-item-content>
                 <v-list-item-title v-if="resource.doc" v-html="resource.doc.name">Hello</v-list-item-title>
               </v-list-item-content>
+              <v-icon v-if="!resource.valid">mdi-alert-circle-outline</v-icon> 
+              <v-icon v-if="resource.valid">mdi-check</v-icon>
             </v-list-item>
           </v-list-item-group>
         </div>
@@ -63,7 +65,22 @@
       fetch(editorEndpoint + '/resources')
       .then(res => res.json())
       .then(res => { this.resources = res })
-      .finally(() => {this.loading = false})
+      .then(() => { this.loading = false })
+      .finally(() => {
+        this.resources.forEach((r)=>{
+          r.valid = null//'mdi-timer-sand-empty';
+          fetch(editorEndpoint + '/resources/check/' + r.id)
+            .then(status => status.text())
+            .then(status => { 
+              r.status = status
+              if(status == '200' || status == '301' || status == '302')
+                r.valid = true//'mdi-check'
+              else
+                r.valid = false//'mdi-alert-circle-outline'
+              console.log(`resource:${r.id} - status:${r.status} - valid:${r.valid}`)
+            })
+        });
+      })
     },
     computed: {
       currentResource() {
