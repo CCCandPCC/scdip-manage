@@ -15,14 +15,21 @@
               <v-icon>mdi-plus</v-icon>
             </v-list-item-icon>New Resource
           </v-list-item>
+          <v-list-item color="primary" @click="checkResources" :disabled="checkingUrls">
+            <v-list-item-icon>
+              <v-icon>mdi-web</v-icon>
+            </v-list-item-icon>Test links
+          </v-list-item>
+          
           <v-divider/>
           <v-list-item-group v-if="resources.length" v-model="resourceIndex" color="primary">
             <v-list-item v-for="(resource, i) in filteredResourceList" :key="i">
               <v-list-item-content>
-                <v-list-item-title v-if="resource.doc" v-html="resource.doc.name">Hello</v-list-item-title>
+                <v-list-item-title v-if="resource.doc" v-html="resource.doc.name">H ello</v-list-item-title>
               </v-list-item-content>
-              <v-icon v-if="!resource.valid">mdi-alert-circle-outline</v-icon> 
-              <v-icon v-if="resource.valid">mdi-check</v-icon>
+              <v-icon v-if="resource.valid == 1">mdi-timer-sand-empty</v-icon>
+              <v-icon color="green" v-if="resource.valid == 2">mdi-check</v-icon>
+              <v-icon color="red" v-if="resource.valid == 3">mdi-alert-circle-outline</v-icon> 
             </v-list-item>
           </v-list-item-group>
         </div>
@@ -59,28 +66,19 @@
       searchText: "",
       saving: false,
       deleting: false,
-      loading: true
+      loading: true,
+      checkingUrls: false
     }),
     created() {
       fetch(editorEndpoint + '/resources')
       .then(res => res.json())
-      .then(res => { this.resources = res })
-      .then(() => { this.loading = false })
-      .finally(() => {
-        this.resources.forEach((r)=>{
-          r.valid = null//'mdi-timer-sand-empty';
-          fetch(editorEndpoint + '/resources/check/' + r.id)
-            .then(status => status.text())
-            .then(status => { 
-              r.status = status
-              if(status == '200' || status == '301' || status == '302')
-                r.valid = true//'mdi-check'
-              else
-                r.valid = false//'mdi-alert-circle-outline'
-              console.log(`resource:${r.id} - status:${r.status} - valid:${r.valid}`)
-            })
-        });
-      })
+      .then(res => { this.resources = res.map((x)=>{
+          x.valid = 0;
+          x.status = ''
+          return x
+        })
+       })
+      .finally(() => { this.loading = false })
     },
     computed: {
       currentResource() {
@@ -95,6 +93,26 @@
       }
     },
     methods: {
+      checkSingleResource(r) {
+        r.valid = 1;//'mdi-timer-sand-empty'
+        return fetch(editorEndpoint + '/resources/check/' + r.id)
+            .then(status => status.text())
+            .then(status => { 
+              r.status = status
+              if(status == '200' || status == '301' || status == '302')
+                r.valid = 2//'mdi-check'
+              else
+                r.valid = 3//'mdi-alert-circle-outline'
+              console.log(`resource:${r.id} - status:${r.status} - valid:${r.valid}`)
+            })
+      },
+      checkResources() {
+        this.checkingUrls = true
+        var promiseArray = this.filteredResourceList.map(this.checkSingleResource)
+        Promise.all(promiseArray)
+        .finally(()=>{ this.checkingUrls = false })
+        
+      },
       saveResource() {
         this.saving = true;
         this.$set(this.currentResource, "id", this.currentResource.id || uuidv4())
