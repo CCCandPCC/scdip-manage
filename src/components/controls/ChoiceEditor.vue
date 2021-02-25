@@ -14,7 +14,7 @@
           :rules="[() => !!value.label || 'This field is required']"
           :error-messages="errorMessages"
           outlined required/>
-        <label>Question prompt</label>
+        <label>Rubric</label>
         <info>This tells the user how to answer e.g. Please select one option</info>
         <v-text-field outlined ref="Example" v-model="value.example" />
         </v-col>
