@@ -18,6 +18,7 @@
                         label=""
                         v-model="value.categories"
                         :rules="rules.categories"
+                        :items="available_categories"
                         chips
                         deletable-chips
                         clearable
@@ -65,7 +66,6 @@
             </v-row>
             <v-row>
                 <v-col>
-                    
                     <v-combobox
                         label=""
                         v-model="value.includeTags"
@@ -123,7 +123,7 @@ export default {
           ],
         },
     }),
-    props: ["value"],
+    props: ["value", "available_categories"],
     watch: {
         value: function() {
             if (!this.value.img)

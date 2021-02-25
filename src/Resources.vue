@@ -28,7 +28,7 @@
     </v-navigation-drawer>
     <v-main style="padding-left:256px">
       <v-container fluid class="fill-height" v-if="currentResource">
-        <component ref="resourceComponent" :is="component" v-model="currentResource.doc"/>
+        <resource-editor ref="resourceComponent" v-model="currentResource.doc" :available_categories="resource_categories"/>
         <v-container>
             <v-btn class="mr-5" :disabled="deleting" :loading="saving" @click="saveResource">Save</v-btn>
             <v-btn :disabled="saving" :loading="deleting" @click="confirmDelete">Delete resource</v-btn>
@@ -52,7 +52,6 @@
     data: () => ({
       resources: [],
       resourceIndex: -1,
-      component: "resource-editor",
       endpoint: process.env.VUE_APP_API_ENDPOINT,
       searchText: "",
       saving: false,
@@ -75,6 +74,9 @@
           return this.resources.filter((r) =>
             r.doc.name.toLowerCase().includes(this.searchText.toLowerCase())
           );
+      },
+      resource_categories() {
+        return this.resources.flatMap(x => x.doc.categories || []).sort()
       }
     },
     methods: {
