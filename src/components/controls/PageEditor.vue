@@ -11,7 +11,7 @@
       required
     ></v-text-field>
     <label>Items (questions and stimulus content)</label>
-    <v-expansion-panels>
+    <v-expansion-panels v-model="openedPanel">
       <v-expansion-panel v-for="(item, index) in value.items" :key="index" >
         <v-expansion-panel-header style="width: 100%">
           <template #default="{open}">
@@ -69,7 +69,8 @@ export default {
   data() {
     return {
       interactionTypes,
-      errorMessages: ''
+      errorMessages: '',
+      openedPanel: (this.value.items.length == 1 ? 0 : null)
     }
   },
   props: {'value': {}, 'embedded': Boolean},
