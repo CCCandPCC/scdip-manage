@@ -19,8 +19,10 @@
                         <ol>
                             <li><a href="#general">General</a></li>
                                 <ul>
+                                    <li><a href="#theme">Theme</a></li>
                                     <li><a href="#landing">Landing</a></li>
                                     <li><a href="#completed">Assessment Completed</a></li>
+                                    <li><a href="#default">Default Results</a></li>
                                     <li><a href="#terms">Terms and Conditions</a></li>
                                     <li><a href="#accessibility">Accessibility Statement</a></li>
                                 </ul>
@@ -39,7 +41,7 @@
                         </ol>
                         <p></p>
                         <a class="anchor" id="general"/><h2>General tab</h2>
-                        <h3>‘Theme’</h3>
+                        <a class="anchor" id="theme"/><h3>‘Theme’</h3>
                         <p>The theme page controls the overarching design of the assessment side of TECHknow. It allows you to directly edit the website ‘Title’, the primary colour (header) and the secondary colour (footer).</p>
 
                         <a class="anchor" id="landing"/><h3>‘Landing’</h3>
@@ -48,6 +50,9 @@
                         <a class="anchor" id="completed"/><h3>‘Assessment Completed’</h3>
                         <p>This is the pop-up in which users will be presented with before any results are shown. This gives them the ability to decline viewing results or view their results based on answered submitted. You are able to change the content and title of this pop up using this page.</p>
 
+                        <a class="anchor" id="default"/><h3>'Default Results'</h3>
+                        <p>This is the pop-up which users will be presented with if there are no relevant resources to be shown. This gives them the ability to re-start the assessment from the beginning and answer the journey questions again.</p>
+                        
                         <a class="anchor" id="terms"/><h3>‘Terms and Conditions’</h3>
                         <p>On this page you’ll be able to review and change the separate T’s & C’s page for the service located on every page of TECHknow in the footer.</p>
 
