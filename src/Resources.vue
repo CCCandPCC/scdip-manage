@@ -17,7 +17,7 @@
           </v-list-item>
           <v-divider/>
           <v-list-item-group v-if="resources.length" v-model="resourceIndex" color="primary">
-            <v-list-item v-for="(resource, i) in filteredResourceList" :key="i">
+            <v-list-item v-for="(resource) in filteredResourceList" :key="resource.id">
               <v-list-item-content>
                 <v-list-item-title v-if="resource.doc" v-html="resource.doc.name">Hello</v-list-item-title>
               </v-list-item-content>
@@ -67,7 +67,7 @@
     },
     computed: {
       currentResource() {
-        return this.resources.length && this.resourceIndex > -1 ? this.resources[this.resourceIndex] : null
+        return this.filteredResourceList.length && this.resourceIndex > -1 ? this.filteredResourceList[this.resourceIndex] : null
       },
       filteredResourceList() {
         if (!this.searchText) return this.resources;
