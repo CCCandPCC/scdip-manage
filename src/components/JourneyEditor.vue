@@ -23,7 +23,7 @@
             </v-col>
         </v-row>
         <h3>Pages</h3>
-        <v-expansion-panels accordion>
+        <v-expansion-panels accordion v-model="currentPanel">
             <draggable v-model="pageOrder" v-bind="dragOptions" @start="drag = true" @end="drag = false" handle=".handle">
                 <transition-group type="transition" :name="!drag ? 'flip-list' : null">
                     <v-expansion-panel v-for="(page, index) in value.doc.pages" :key="index" >
@@ -76,7 +76,8 @@ export default {
             drag: false,
             errorMessages: '',
             saving: false,
-            deleting: false
+            deleting: false,
+            currentPanel: null
         }
     },
     components: {
@@ -109,7 +110,11 @@ export default {
         this.value.doc.pages.splice(index, 1)
     },
     append() {
-        this.value.doc.pages.push({title: "New page", items: []})
+        this.value.doc.pages.push({title: "New page", items: [{
+            fieldType: 'single-choice-input',
+            choices: ['Yes','No','Maybe'].map(x => ({value: x, id: uuidv4(), img: {}, choices: [], tags: []}))
+        }]})
+        this.currentPanel = this.value.doc.pages.length-1;
     },
     deleteJourney() {
         this.$dialog
