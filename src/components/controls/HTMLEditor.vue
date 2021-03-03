@@ -5,42 +5,102 @@
             <div class="editor">
                 <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
                     <div class="menubar v-btn-toggle">
-                        <v-btn @click="commands.undo">
-                            <v-icon>mdi-undo</v-icon>
-                        </v-btn>
-                        <v-btn @click="commands.redo">
-                            <v-icon>mdi-redo</v-icon>
-                        </v-btn>
-                        <v-btn :class="{'v-btn--active': isActive.bold()}" @click="commands.bold">
-                            <v-icon>mdi-format-bold</v-icon>
-                        </v-btn>
-                        <v-btn v-show="false" :class="{'v-btn--active': isActive.italic()}" @click="commands.italic">
-                            <v-icon>mdi-format-italic</v-icon>
-                        </v-btn>
-                        <v-btn :class="{'v-btn--active': isActive.underline()}" @click="commands.underline">
-                            <v-icon>mdi-format-underline</v-icon>
-                        </v-btn>
-                        <v-btn @click="showImagePrompt(commands.caption_image)">
-                            <v-icon>mdi-signature-image</v-icon>
-                        </v-btn>
-                        <v-btn @click="showVideoPrompt(commands.video)">
-                            <v-icon>mdi-video</v-icon>
-                        </v-btn>
-                        <v-btn :class="{'v-btn--active': isActive.heading({ level: 1})}" @click="commands.heading({ level: 1})">
-                            H1
-                        </v-btn>
-                        <v-btn :class="{'v-btn--active': isActive.heading({ level: 2})}" @click="commands.heading({ level: 2})">
-                            H2
-                        </v-btn>
-                        <v-btn :class="{'v-btn--active': isActive.heading({ level: 3})}" @click="commands.heading({ level: 3})">
-                            H3
-                        </v-btn>
-                        <v-btn :class="{'v-btn--active': isActive.bullet_list()}" @click="commands.bullet_list">
-                            <v-icon>mdi-format-list-bulleted</v-icon>
-                        </v-btn>
-                        <v-btn :class="{'v-btn--active': isActive.ordered_list()}" @click="commands.ordered_list">
-                            <v-icon>mdi-format-list-numbered</v-icon>
-                        </v-btn>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn @click="commands.undo" v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-undo</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>undo</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn @click="commands.redo" v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-redo</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>redo</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn :class="{'v-btn--active': isActive.bold()}" @click="commands.bold" v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-format-bold</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>bold</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn v-show="false" :class="{'v-btn--active': isActive.italic()}" @click="commands.italic" v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-format-italic</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>italic</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn :class="{'v-btn--active': isActive.underline()}" @click="commands.underline" v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-format-underline</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>underline</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn @click="showImagePrompt(commands.caption_image)" v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-signature-image</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>insert image</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn @click="showVideoPrompt(commands.video)" v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-video</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>insert video</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn :class="{'v-btn--active': isActive.heading({ level: 1})}" @click="commands.heading({ level: 1})" v-bind="attrs" v-on="on">
+                                    H1
+                                </v-btn>
+                            </template>
+                            <span>heading1</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn :class="{'v-btn--active': isActive.heading({ level: 2})}" @click="commands.heading({ level: 2})" v-bind="attrs" v-on="on">
+                                    H2
+                                </v-btn>
+                            </template>
+                            <span>heading2</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn :class="{'v-btn--active': isActive.heading({ level: 3})}" @click="commands.heading({ level: 3})" v-bind="attrs" v-on="on">
+                                    H3
+                                </v-btn>
+                            </template>
+                            <span>heading3</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn :class="{'v-btn--active': isActive.bullet_list()}" @click="commands.bullet_list" v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-format-list-bulleted</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>bulleted list</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn :class="{'v-btn--active': isActive.ordered_list()}" @click="commands.ordered_list" v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-format-list-numbered</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>numbered list</span>
+                        </v-tooltip>
                     </div>
                 </editor-menu-bar>
                 <v-card>

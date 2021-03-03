@@ -2,7 +2,7 @@
   <v-container class="pa-0">
     <h2 v-if="!embedded">Page</h2>
     <label>Page title</label>
-    <info>This will be displayed at the top of the page</info>
+    <info>This will be displayed at the top of the page e.g. Looking at my home page-1</info>
     <v-text-field outlined
       ref="Header"
       v-model="value.title"
