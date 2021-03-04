@@ -1,7 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer app absolute :clipped="true" color="blue--lighten-1" v-model="drawer">
-      <v-icon large @click.stop="drawer = !drawer"> mdi-chevron-left </v-icon>
+    <v-navigation-drawer app absolute permanent fixed disable-resize-watcher :clipped="true" color="blue--lighten-1" >
       <v-list>
         <div v-if="loading">
           <v-skeleton-loader type="list-item"/>

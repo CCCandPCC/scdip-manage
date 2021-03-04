@@ -1,7 +1,6 @@
 <template> 
   <div >
-    <v-navigation-drawer app absolute :clipped="true" color="blue--lighten-1" v-model="drawer">
-      <v-icon large @click.stop="drawer = !drawer"> mdi-chevron-left </v-icon>
+    <v-navigation-drawer app absolute permanent fixed disable-resize-watcher :clipped="true" color="blue--lighten-1">
       <v-list>
         <v-list-item color="primary" @click="changeView('introduction')">Introduction</v-list-item>
         <v-list-item color="primary" @click="changeView('theme')">Theme</v-list-item>
