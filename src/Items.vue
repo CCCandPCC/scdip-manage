@@ -93,10 +93,6 @@ export default {
     itemType(typeName) {
       return itemTypeName(typeName)
     },
-    journeySelector() {
-      this.errorMessages = [] 
-      //this.loadEditor(this.currentJourney,'journey')
-    },
     iconName(typeName) {
       return itemIcon(typeName)
     },
@@ -123,9 +119,8 @@ export default {
           pages: []
         }
       }
-      this.journeys.push(journey)
-      //this.currentJourney = journey;
-      this.journeySelector();
+      this.journeys.splice(0, 0, journey)
+      this.loadJourney(journey)
     },
     createJourney() {
       this.validateJourney()
